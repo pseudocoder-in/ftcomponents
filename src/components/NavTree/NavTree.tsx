@@ -8,23 +8,26 @@ export interface NavTreeProps {
     theme: string;
     data: any;
     onSelect ?: (node: Node) => void;
-    getElementToRender ?: (node: Node) => {};
 }
 
 interface Data {
     [id : string]: Node;
 }
 
-const generateNextID = (() => {
-    let id = 0;
-    return () => (++id).toString();
-})();
 
 const useStyles = createUseStyles({
     wrapper: {
+        width: '100vw',
+        height: '100vh',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        scrollBehavior: 'auto',
+        overflow: 'auto',
     }
 });
 
+let id = 0;
 
 export const NavTree = (props: NavTreeProps) => {
     const [ nodes, setNodes ] = useState({} as Data);
@@ -41,9 +44,14 @@ export const NavTree = (props: NavTreeProps) => {
         for(let key in nodes) {
             nodes[key].isOpen = false;
             nodes[key].isRoot = nodes[key].hasOwnProperty("isRoot") ? true : false;
+            id = Math.max(Number(key), id);
         }
         setNodes(nodes as Data);
     }
+
+    const generateNextID = () => {
+        return (++id).toString();
+    };    
       
     const getRootNodes = () => {
         return values(nodes).filter((node: Node) => node.isRoot === true );
@@ -54,8 +62,26 @@ export const NavTree = (props: NavTreeProps) => {
         return node.children.map(id => nodes[id]);
     } 
 
+    const getNode = (id: string) => {
+        return nodes[id];
+    }
+
+    const closeNodesRecursive = (node: Node) => {
+        nodes[node.id].isOpen = false;
+        getChildNodes(node).map(childNode => {
+            if(childNode.isOpen){
+                nodes[childNode.id].isOpen = false;
+                closeNodesRecursive(childNode);
+            }
+        });
+    }
+
     const onToggle = (node: Node) => {
-        nodes[node.id].isOpen = !node.isOpen;
+        if(node.isOpen){ //close all open child nodes repectively
+            closeNodesRecursive(node);
+        } else {
+            nodes[node.id].isOpen = true;
+        }
         setNodes({...nodes});
     }
 
@@ -74,9 +100,10 @@ export const NavTree = (props: NavTreeProps) => {
             <NavTreeNode 
               node={node}
               getChildNodes={getChildNodes}
+              getNode={getNode}
               onToggle={onToggle}
               onNodeSelect={onNodeSelect}
-              getElementToRender={props.getElementToRender}
+              getNextID={generateNextID}
             />
           ))}
         </Card>
