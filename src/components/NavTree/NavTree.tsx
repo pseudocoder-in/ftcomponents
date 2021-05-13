@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { values, cloneDeep } from 'lodash';
-import { Card } from 'ui-neumorphism';
+import { Card , TextField} from 'ui-neumorphism';
 import { createUseStyles } from 'react-jss';
 import { NavTreeNode } from './NavTreeNode';
 
@@ -23,7 +23,7 @@ const useStyles = createUseStyles({
         display: 'flex',
         flexDirection: 'column',
         scrollBehavior: 'auto',
-        overflow: 'auto',
+        overflow: 'auto'
     }
 });
 
@@ -31,6 +31,8 @@ let id = 0;
 
 export const NavTree = (props: NavTreeProps) => {
     const [ nodes, setNodes ] = useState({} as Data);
+    const [ searchName, setSearchName ] = useState("");
+
     const classes = useStyles();
     
     useEffect(() => {
@@ -38,12 +40,20 @@ export const NavTree = (props: NavTreeProps) => {
         parseJsonData(props.data);
     },[]);
 
+    const replacer = (key: string, value: any) => {
+        if (key=="isOpen") return undefined;
+        return value;
+    }
+    const saveTreeData = () => {
+        let treeDataJson = JSON.stringify(nodes, replacer);
+        console.log(treeDataJson);
+    }
 
     const parseJsonData = (data: any) => {
         let nodes = cloneDeep(data);
         for(let key in nodes) {
             nodes[key].isOpen = false;
-            nodes[key].isRoot = nodes[key].hasOwnProperty("isRoot") ? true : false;
+            nodes[key].isRoot = nodes[key].hasOwnProperty("isRoot") ? nodes[key].isRoot == 'true' : false;
             id = Math.max(Number(key), id);
         }
         setNodes(nodes as Data);
@@ -52,9 +62,12 @@ export const NavTree = (props: NavTreeProps) => {
     const generateNextID = () => {
         return (++id).toString();
     };    
-      
+
     const getRootNodes = () => {
-        return values(nodes).filter((node: Node) => node.isRoot === true );
+        if(searchName){
+            return values(nodes).filter((node: Node) => node.name.toLowerCase().startsWith(searchName));
+        }
+       return values(nodes).filter((node: Node) => node.isRoot === true );
     }
 
     const getChildNodes = (node: Node) => {
@@ -64,6 +77,19 @@ export const NavTree = (props: NavTreeProps) => {
 
     const getNode = (id: string) => {
         return nodes[id];
+    }
+
+    const updateNode = (node: Node, name : string, partnerName: string, childrenInfo: Map<string, string>) => {
+        nodes[node.id].name = name;
+        nodes[node.id].partner = partnerName;
+        nodes[node.id].children = node.children;
+        childrenInfo.forEach((value, key) => {
+            if(!nodes[key])
+                nodes[key] = { id:key, name:value, children:[]} as any;
+            else
+                nodes[key].name = value || "";
+        })
+        setNodes({...nodes});
     }
 
     const closeNodesRecursive = (node: Node) => {
@@ -93,9 +119,15 @@ export const NavTree = (props: NavTreeProps) => {
         }
     }
 
+    const onSearching = (e: any) => {
+        let searchName = e.value.toLowerCase();
+        setSearchName(searchName);
+    }
+
     const rootNodes = getRootNodes();
     return (
         <Card bordered className={classes.wrapper}>
+            <TextField label={"Search ..."} style={{justifyContent: 'flex-end'}} onChange={onSearching}/>
           { rootNodes.map((node : Node) => (
             <NavTreeNode 
               node={node}
@@ -104,6 +136,7 @@ export const NavTree = (props: NavTreeProps) => {
               onToggle={onToggle}
               onNodeSelect={onNodeSelect}
               getNextID={generateNextID}
+              updateNode={updateNode}
             />
           ))}
         </Card>
