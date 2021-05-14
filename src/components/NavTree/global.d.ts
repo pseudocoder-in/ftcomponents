@@ -6,3 +6,5 @@ interface Node {
     name: string;
     [key: string]: any; //client can add random properties 
 }
+
+declare module 'react-tree-graph';
