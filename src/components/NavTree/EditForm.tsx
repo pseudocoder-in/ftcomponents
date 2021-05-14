@@ -59,6 +59,8 @@ const useStyles = createUseStyles({
     }
 });
 
+let childVewKey = 11;
+
 export const EditForm = (props: EditFormProps) => {
 
     const { node, getNextID, getNode, scrollToElement, setModalElementEditIsOpen, updateNode } = props;
@@ -98,6 +100,7 @@ export const EditForm = (props: EditFormProps) => {
     }
 
     const handleChildRemove = (e: any, childID: string) => {
+        childVewKey++;
         let updatedNode = cloneDeep(activeNode);
         updatedNode.children = updatedNode.children.filter(id => id !== childID);
         setActiveNode(updatedNode);
@@ -135,27 +138,37 @@ export const EditForm = (props: EditFormProps) => {
         <Modal
             isOpen={modalIsOpen}
             onAfterOpen={afterModalElementEditIsOpen}
-            onRequestClose={onCloseModalElementEdit}
             className={classes.modalStyle}
             ariaHideApp={false}
             contentLabel="Element Edit Modal"
+            style={{
+                overlay: {
+                    backgroundColor: constants.DARK_THEME? constants.OVERLAY_DARK_COLOR : constants.OVERLAY_LIGHT_COLOR,
+                }
+            }}
             >
-                <Card bordered elevation={5} className={classes.modalEdit}>
+                <Card bordered elevation={5} className={classes.modalEdit} dark={constants.DARK_THEME}>
                 <CardContent className={classes.modalContent}> 
-                    <span className={classes.inSameRow}><Subtitle2>Name : </Subtitle2><TextField value={activeNode.name} onChange={onNameChange}></TextField></span>
-                    <span className={classes.inSameRow}><Subtitle2>Spouse : </Subtitle2><TextField value={activeNode.partner} onChange={onPartnerNameChange}></TextField></span>
-                    <Divider style={{marginBottom:constants.defaultPadding}}/>
-                    <div className={classes.childrenEditView}>
+                    <span className={classes.inSameRow}>
+                        <Subtitle2 dark={constants.DARK_THEME}>Name : </Subtitle2>
+                        <TextField id={activeNode.id} value={activeNode.name} onChange={onNameChange} dark={constants.DARK_THEME}></TextField>
+                    </span>
+                    <span className={classes.inSameRow}>
+                        <Subtitle2 dark={constants.DARK_THEME}>Spouse : </Subtitle2>
+                        <TextField id={activeNode.id+'p'} value={activeNode.partner} onChange={onPartnerNameChange} dark={constants.DARK_THEME}></TextField>
+                    </span>
+                    <Divider style={{marginBottom:constants.defaultPadding}} dark={constants.DARK_THEME}/>
+                    <div key={childVewKey+"cview"} className={classes.childrenEditView}>
                     { 
                         activeNode.children.map((id) => {
                             let name =  childrenNames.get(id) || (getNode(id) ? getNode(id).name : "");
                             return (
                                 <span className={classes.inSameRow}>
-                                    <Subtitle2>Child :</Subtitle2>
-                                    <TextField value={ name } onChange={(e : any)=>onChildNameChange(e, id)}></TextField>
+                                    <Subtitle2 dark={constants.DARK_THEME}>Child :</Subtitle2>
+                                    <TextField id={id} value={ name } onChange={(e : any)=>onChildNameChange(e, id)} dark={constants.DARK_THEME}></TextField>
                                     <div style={{padding:constants.defaultPadding}}>
-                                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildRemove(e, id)}>
-                                        <Icon path={mdiCloseThick} size={0.8} color={constants.defaultLightIconColor}/>
+                                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildRemove(e, id)} dark={constants.DARK_THEME}>
+                                        <Icon path={mdiCloseThick} size={0.8} />
                                     </IconButton>
                                     </div>
                                 </span>
@@ -163,8 +176,8 @@ export const EditForm = (props: EditFormProps) => {
                         })
                     }
                     <div ref={activeAddElementRef}>
-                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildAdd(e)}>
-                        <Icon path={mdiAccountPlus} size={0.8} color={constants.defaultLightIconColor}/>
+                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildAdd(e)} dark={constants.DARK_THEME}>
+                        <Icon path={mdiAccountPlus} size={0.8} />
                     </IconButton>
                     </div>
                     </div>

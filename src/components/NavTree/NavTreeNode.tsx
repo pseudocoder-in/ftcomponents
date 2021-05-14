@@ -22,6 +22,7 @@ interface NavTreeNodeProps {
     editButtonStyle : any;
     getNextID: () => string;
     updateNode: (node: Node, name : string, partner: string, childrenInfo: Map<string, string>) => void;
+    removeNode: (node: Node) => void;
 }
 
 const useStyles = createUseStyles({
@@ -71,13 +72,14 @@ const useStyles = createUseStyles({
 });
 
 export const NavTreeNode = (props: NavTreeNodeProps) => {
-    const { node, getChildNodes, level, onToggle, onNodeSelect, margin, elementStyle, editButtonStyle, getNextID, getNode} = props;
-    const [activeNodeID, setActiveNodeID ] = useState("0");
-    const [activeNode, setActiveNode ] = useState(node);
+    const { node, getChildNodes, level, onToggle, onNodeSelect, margin, elementStyle, editButtonStyle, getNextID, getNode, removeNode} = props;
+    //const [activeNodeID, setActiveNodeID ] = useState("0");
+    //const [activeNode, setActiveNode ] = useState(node);
     const [modalElementEditIsOpen, setModalElementEditIsOpen] = useState(false);
     const classes = useStyles({margin, level});
     const activeElementRef = useRef<HTMLInputElement>(null);
-    const activeAddElementRef = useRef<HTMLInputElement>(null);
+    //const activeAddElementRef = useRef<HTMLInputElement>(null);
+    //const [isOpen, setIsOpen ] = useState(node);
 
     useEffect(()=>{
         overrideThemeVariables({  
@@ -91,7 +93,7 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
             })
             if(activeElementRef.current)
                 scrollToElement(activeElementRef.current);
-    },[activeNode])
+    },[])
 
     const scrollToElement = (targetElement : HTMLElement | undefined) => {
         if(targetElement ){
@@ -104,10 +106,10 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
     };
 
     const handleElementClicked = (e: any) => {
-        setActiveNodeID(e.value);
+        //setActiveNodeID(e.value);
         onToggle(node);
-        let updatedNode = cloneDeep(activeNode);
-        setActiveNode(updatedNode);
+        //let updatedNode = cloneDeep(activeNode);
+        //setActiveNode(updatedNode);
     }
 
     const handleElementEdit = (e: any) => {
@@ -115,7 +117,7 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
     }
 
     const handleElementRemove = (e: any) => {
-        
+        removeNode(node);
     }
 
 
@@ -126,24 +128,25 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
                     {node.isOpen ? <Icon path={mdiArrowDownBold} size={0.6}/> : <Icon path={mdiArrowRightBold} size={0.6}/>}
                 </div>
                 <ToggleButton 
+                    dark={constants.DARK_THEME}
                     style={{...elementStyle}}
                     key={node.id}
                     value={node.id}
                     color='var(--primary)'
-                    selected={activeNodeID === node.id}
+                    selected={node.isOpen}
                     size='small'
                     onClick={(e : Event) => handleElementClicked(e)}>
                         <Icon path={node.children.length > 0 ? mdiAccountGroup : (node.partner ? mdiAccountSupervisor: mdiAccount)} size={0.8} style={{paddingLeft:"5px"}} />
                         <Subtitle2 style={{paddingLeft: constants.defaultPadding}}>{node.name}</Subtitle2>
                 </ToggleButton>
                 <div style={{...editButtonStyle}}>
-                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleElementEdit(e)}>
+                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleElementEdit(e)} dark={constants.DARK_THEME}>
                         <Icon path={mdiAccountEdit} size={0.8} />
                     </IconButton>
                     {false && <IconButton rounded text={false} size='small' onClick={(e : Event) => {}}>
                         <Icon path={mdiAccountPlus} size={0.8} />
                     </IconButton>}
-                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleElementRemove(e)}>
+                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleElementRemove(e)} dark={constants.DARK_THEME}>
                         <Icon path={mdiCloseThick} size={0.8} />
                     </IconButton>
                 </div>
@@ -159,6 +162,7 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
                     {node.isOpen ? <Icon path={mdiArrowDownBold} size={0.6} color="transparent"/> : <Icon path={mdiArrowRightBold} size={0.6} color="transparent" style={{paddingLeft:"5px"}}/>}
                 </div>
                 <ToggleButton 
+                    dark={constants.DARK_THEME}
                     disabled
                     style={{...elementStyle}}
                     key={node.id+"p"}
@@ -178,6 +182,7 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
         { node.isOpen && node.partner && getPartnerElementToRender()}
         { node.isOpen && getChildNodes(node).map(childNode => (
             <NavTreeNode 
+            key={childNode.id}
             {...props}
             node={childNode}          
             level={level + 1}
