@@ -11,6 +11,7 @@ import { EditForm } from './EditForm'
 import * as constants from './constants'
 
 interface NavTreeNodeProps {
+    theme : string;
     node : Node;
     margin : number;
     getChildNodes : (node: Node) => Array<Node>;
@@ -128,7 +129,7 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
                     {node.isOpen ? <Icon path={mdiArrowDownBold} size={0.6}/> : <Icon path={mdiArrowRightBold} size={0.6}/>}
                 </div>
                 <ToggleButton 
-                    dark={constants.DARK_THEME}
+                    dark={props.theme === "dark"}
                     style={{...elementStyle}}
                     key={node.id}
                     value={node.id}
@@ -140,13 +141,13 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
                         <Subtitle2 style={{paddingLeft: constants.defaultPadding}}>{node.name}</Subtitle2>
                 </ToggleButton>
                 <div style={{...editButtonStyle}}>
-                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleElementEdit(e)} dark={constants.DARK_THEME}>
+                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleElementEdit(e)} dark={props.theme === "dark"}>
                         <Icon path={mdiAccountEdit} size={0.8} />
                     </IconButton>
                     {false && <IconButton rounded text={false} size='small' onClick={(e : Event) => {}}>
                         <Icon path={mdiAccountPlus} size={0.8} />
                     </IconButton>}
-                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleElementRemove(e)} dark={constants.DARK_THEME}>
+                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleElementRemove(e)} dark={props.theme === "dark"}>
                         <Icon path={mdiCloseThick} size={0.8} />
                     </IconButton>
                 </div>
@@ -162,7 +163,7 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
                     {node.isOpen ? <Icon path={mdiArrowDownBold} size={0.6} color="transparent"/> : <Icon path={mdiArrowRightBold} size={0.6} color="transparent" style={{paddingLeft:"5px"}}/>}
                 </div>
                 <ToggleButton 
-                    dark={constants.DARK_THEME}
+                    dark={props.theme === "dark"}
                     disabled
                     style={{...elementStyle}}
                     key={node.id+"p"}

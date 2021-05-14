@@ -9,6 +9,8 @@ export interface NavTreeProps {
     theme: string;
     data: any;
     onSelect ?: (node: Node) => void;
+    width: string;
+    height: string;
 }
 
 interface Data {
@@ -18,9 +20,9 @@ interface Data {
 
 const useStyles = createUseStyles({
     wrapper: {
-        width: '100vw',
-        height: '100vh',
-        minHeight: '100vh',
+        width: (props: { width: string; height: string }) => props.width,
+        height: (props: { width: string; height: string }) => props.height,
+        minHeight: (props: { width: string; height: string }) => props.height,
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -44,10 +46,14 @@ export const NavTree = (props: NavTreeProps) => {
     const [ orgNodes, setOrgNodes ] = useState({} as Data);
     const [ searchName, setSearchName ] = useState("");
     const [ maxID, setMaxID ] = useState(0);
+    const [ theme, setTheme ] = useState("dark");
 
-    const classes = useStyles();
+    let {width, height} = props
+    const classes = useStyles({width, height});
     
     useEffect(() => {
+        if(props.theme)
+            setTheme(props.theme.toLowerCase());
         //parse the data passed from the client;
         parseJsonData(props.data);
     },[]);
@@ -161,11 +167,12 @@ export const NavTree = (props: NavTreeProps) => {
 
     const rootNodes = getRootNodes();
     return (
-        <Card bordered className={classes.wrapper} dark={constants.DARK_THEME}>
+        <Card bordered className={classes.wrapper} dark={theme === "dark"}>
             <TextField label={"Search ..."} style={{justifyContent: 'flex-end'}} onChange={onSearching}/>
-            <Card key={componentId+"view"} bordered className={classes.innerWrapper} dark={constants.DARK_THEME}>
+            <Card key={componentId+"view"} bordered className={classes.innerWrapper} dark={theme === "dark"}>
             { rootNodes.map((node : Node) => (
                 <NavTreeNode 
+                theme={theme}
                 key={node.id}
                 node={node}
                 getChildNodes={getChildNodes}
@@ -179,8 +186,8 @@ export const NavTree = (props: NavTreeProps) => {
             ))}
             </Card>
             <div style={{display:'flex', justifyContent: 'center', padding:constants.defaultPadding, columnGap:constants.defaultPadding}} >
-            <Button dark={constants.DARK_THEME} style={{width:"120px"}} onClick={resetTreeData}> Reset</Button>
-            <Button dark={constants.DARK_THEME} style={{width:"120px"}} onClick={saveTreeData}> Save</Button>
+            <Button dark={theme === "dark"} style={{width:"120px"}} onClick={resetTreeData}> Reset</Button>
+            <Button dark={theme === "dark"} style={{width:"120px"}} onClick={saveTreeData}> Save</Button>
             </div>
         </Card>
       )

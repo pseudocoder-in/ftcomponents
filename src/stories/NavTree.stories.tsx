@@ -17,13 +17,17 @@ const Template: Story<NavTreeProps> = (args) => <NavTree {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  theme : "Light",
-  data : treeData
+  theme : "light",
+  data : treeData,
+  width: "100vw",
+  height: "100vh"
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
-  theme : "Dark",
-  data : treeData
+  theme : "dark",
+  data : treeData,
+  width: "100vw",
+  height: "100vh"
 };
 

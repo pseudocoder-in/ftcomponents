@@ -143,31 +143,31 @@ export const EditForm = (props: EditFormProps) => {
             contentLabel="Element Edit Modal"
             style={{
                 overlay: {
-                    backgroundColor: constants.DARK_THEME? constants.OVERLAY_DARK_COLOR : constants.OVERLAY_LIGHT_COLOR,
+                    backgroundColor: props.theme === "dark"? constants.OVERLAY_DARK_COLOR : constants.OVERLAY_LIGHT_COLOR,
                 }
             }}
             >
-                <Card bordered elevation={5} className={classes.modalEdit} dark={constants.DARK_THEME}>
+                <Card bordered elevation={5} className={classes.modalEdit} dark={props.theme === "dark"}>
                 <CardContent className={classes.modalContent}> 
                     <span className={classes.inSameRow}>
-                        <Subtitle2 dark={constants.DARK_THEME}>Name : </Subtitle2>
-                        <TextField id={activeNode.id} value={activeNode.name} onChange={onNameChange} dark={constants.DARK_THEME}></TextField>
+                        <Subtitle2 dark={props.theme === "dark"}>Name : </Subtitle2>
+                        <TextField id={activeNode.id} value={activeNode.name} onChange={onNameChange} dark={props.theme === "dark"}></TextField>
                     </span>
                     <span className={classes.inSameRow}>
-                        <Subtitle2 dark={constants.DARK_THEME}>Spouse : </Subtitle2>
-                        <TextField id={activeNode.id+'p'} value={activeNode.partner} onChange={onPartnerNameChange} dark={constants.DARK_THEME}></TextField>
+                        <Subtitle2 dark={props.theme === "dark"}>Spouse : </Subtitle2>
+                        <TextField id={activeNode.id+'p'} value={activeNode.partner} onChange={onPartnerNameChange} dark={props.theme === "dark"}></TextField>
                     </span>
-                    <Divider style={{marginBottom:constants.defaultPadding}} dark={constants.DARK_THEME}/>
+                    <Divider style={{marginBottom:constants.defaultPadding}} dark={props.theme === "dark"}/>
                     <div key={childVewKey+"cview"} className={classes.childrenEditView}>
                     { 
                         activeNode.children.map((id) => {
                             let name =  childrenNames.get(id) || (getNode(id) ? getNode(id).name : "");
                             return (
                                 <span className={classes.inSameRow}>
-                                    <Subtitle2 dark={constants.DARK_THEME}>Child :</Subtitle2>
-                                    <TextField id={id} value={ name } onChange={(e : any)=>onChildNameChange(e, id)} dark={constants.DARK_THEME}></TextField>
+                                    <Subtitle2 dark={props.theme === "dark"}>Child :</Subtitle2>
+                                    <TextField id={id} value={ name } onChange={(e : any)=>onChildNameChange(e, id)} dark={props.theme === "dark"}></TextField>
                                     <div style={{padding:constants.defaultPadding}}>
-                                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildRemove(e, id)} dark={constants.DARK_THEME}>
+                                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildRemove(e, id)} dark={props.theme === "dark"}>
                                         <Icon path={mdiCloseThick} size={0.8} />
                                     </IconButton>
                                     </div>
@@ -176,7 +176,7 @@ export const EditForm = (props: EditFormProps) => {
                         })
                     }
                     <div ref={activeAddElementRef}>
-                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildAdd(e)} dark={constants.DARK_THEME}>
+                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildAdd(e)} dark={props.theme === "dark"}>
                         <Icon path={mdiAccountPlus} size={0.8} />
                     </IconButton>
                     </div>

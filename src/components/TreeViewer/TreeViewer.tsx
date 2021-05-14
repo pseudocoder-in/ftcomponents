@@ -26,14 +26,16 @@ interface D3Node {
 export interface TreeViewerProps {
     theme: string;
     data: Data;
+    width: string;
+    height: string;
     handleShare: () => void;
     handleFullScreen: () => void;
 }
 
 const useStyles = createUseStyles({
     wrapper: {
-        width: '100vw',
-        height: '100vh',
+        width: (props: { width: string; height: string }) => props.width,
+        height: (props: { width: string; height: string }) => props.height,
         overflow: 'auto',
         position: 'relative'
     }
@@ -51,9 +53,9 @@ export const TreeViewer = (props: TreeViewerProps) => {
     const [ searchName, setSearchName ] = useState("");
     const [ theme, setTheme ] = useState("dark");
     const componentRef = useRef<HTMLDivElement>(null);
-
+    let {width, height} = props
     let nextID = 0;
-    const classes = useStyles();
+    const classes = useStyles({width, height});
     
     useEffect(() => {
         convertJSONtoD3Heirarchy(props.data);
