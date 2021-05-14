@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
 import { TreeViewer, TreeViewerProps } from '../components';
-import {default as treeData} from '../components/NavTree/treeData.json';
+import {default as treeData} from './assets/treeData.json';
 
 export default {
   title: 'Example/TreeViewer',

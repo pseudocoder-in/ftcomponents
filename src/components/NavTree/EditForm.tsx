@@ -12,6 +12,7 @@ import * as constants from './constants'
 
 
 interface EditFormProps {
+    theme: string,
     node : Node,
     getNextID : () => string;
     getNode: (id: string) => Node;
@@ -118,19 +119,16 @@ export const EditForm = (props: EditFormProps) => {
     }
 
     const onChildNameChange = (e: any, id: string) => {
-        console.log(id+"  "+e.value);
         let newNamesObj = cloneDeep(childrenNames);
         newNamesObj.set(id, e.value);
         setChildrenNames(newNamesObj);
     }
 
     const onPartnerNameChange = (e: any) => {
-        console.log(activeNode.id+"  "+e.value);
         setPartnerName(e.value);
     }
 
     const onNameChange = (e: any) => {
-        console.log(activeNode.id+"  "+e.value);
         setName(e.value);
     }
 
