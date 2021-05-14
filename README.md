@@ -19,7 +19,9 @@ import { NavTreeNode } from '@subhashjha/ftcomponents';
 ### TreeViewer
 
 Component to load the tree json data and display it in a tree like structure. It uses react-tree-graph and d3 libraries.
-<img width="869" alt="Screenshot 2021-05-15 at 3 07 44 AM" src="https://user-images.githubusercontent.com/83978810/118334188-ba131a00-b52a-11eb-9ea5-3e8471b35ea0.png">
+
+![treeviewer](https://user-images.githubusercontent.com/83978810/118334685-ae742300-b52b-11eb-8a76-e7959b7365b4.gif)
+
 ```JS
 import { TreeViewer } from '@subhashjha/ftcomponents';
 ```
