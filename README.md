@@ -7,6 +7,8 @@
 ### NavTree
 
 UI Component to load and edit the JSON data which is structured to create a tree easily.
+<img width="450" alt="Screenshot 2021-05-15 at 3 06 12 AM" src="https://user-images.githubusercontent.com/83978810/118334093-846e3100-b52a-11eb-9ef8-de7432f8d654.png">
+<img width="450" alt="Screenshot 2021-05-15 at 3 06 58 AM" src="https://user-images.githubusercontent.com/83978810/118334143-9ea80f00-b52a-11eb-8450-245a3d55332e.png">
 
 ```JS
 import { NavTreeNode } from '@subhashjha/ftcomponents';
@@ -17,7 +19,7 @@ import { NavTreeNode } from '@subhashjha/ftcomponents';
 ### TreeViewer
 
 Component to load the tree json data and display it in a tree like structure. It uses react-tree-graph and d3 libraries.
-
+<img width="869" alt="Screenshot 2021-05-15 at 3 07 44 AM" src="https://user-images.githubusercontent.com/83978810/118334188-ba131a00-b52a-11eb-9ea5-3e8471b35ea0.png">
 ```JS
 import { TreeViewer } from '@subhashjha/ftcomponents';
 ```
