@@ -151,7 +151,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
     }
 
     const handleContextMenu = () => {
-
+        
     }
 
     const filterNodes = (parent : D3Node, searchName: string) => {

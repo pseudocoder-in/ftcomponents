@@ -1,12 +1,17 @@
 {
   "name": "@subhashjha/ftcomponents",
-  "version": "0.1.0",
+  "version": "0.1.2",
+  "homepage":"https://github.com/subhashjha333/ftcomponents#readme",
   "private": false,
   "main:": "dist/index.js",
   "files": [
     "dist",
     "README.md"
   ],
+  "author": {
+    "name": "Subhash Jha",
+    "email": "subhashjha.email@gmail.com"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",

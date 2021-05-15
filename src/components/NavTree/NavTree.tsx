@@ -11,6 +11,7 @@ export interface NavTreeProps {
     onSelect ?: (node: Node) => void;
     width: string;
     height: string;
+    onSave ?: (data: any) => void;
 }
 
 interface Data {
@@ -65,7 +66,8 @@ export const NavTree = (props: NavTreeProps) => {
     const saveTreeData = () => {
         setOrgNodes(cloneDeep(nodes));
         let treeDataJson = JSON.stringify(nodes, replacer);
-        console.log(treeDataJson);
+        if(props.onSave)
+            props.onSave(treeDataJson);
     }
 
     const resetTreeData = () => {
