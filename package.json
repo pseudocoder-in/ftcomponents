@@ -1,7 +1,7 @@
 {
-  "name": "@subhashjha/ftcomponents",
-  "version": "0.1.2",
-  "homepage":"https://github.com/subhashjha333/ftcomponents#readme",
+  "name": "@pseudocoder/ftcomponents",
+  "version": "0.1.0",
+  "homepage":"https://github.com/pseudocoder-in/ftcomponents#readme",
   "private": false,
   "main:": "dist/index.js",
   "files": [
@@ -15,8 +15,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/subhashjha333/ftcomponents"
+    "url": "https://github.com/pseudocoder-in/ftcomponents"
   },
+  "keywords": [
+    "reactjs",
+    "neumorphism",
+    "UI"
+  ],
   "dependencies": {
     "@mdi/js": "^5.9.55",
     "@mdi/react": "^1.5.0",
