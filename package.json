@@ -1,11 +1,13 @@
 {
-  "name": "@pseudocoder/ftcomponents",
-  "version": "0.1.0",
-  "homepage":"https://github.com/pseudocoder-in/ftcomponents#readme",
+  "name": "@pseudocoder-in/ftcomponents",
+  "version": "0.1.8",
+  "homepage": "https://github.com/pseudocoder-in/ftcomponents#readme",
   "private": false,
-  "main:": "dist/index.js",
+  "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "types": "lib/index.d.ts",
   "files": [
-    "dist",
+    "lib",
     "README.md"
   ],
   "author": {
@@ -22,85 +24,46 @@
     "neumorphism",
     "UI"
   ],
-  "dependencies": {
-    "@mdi/js": "^5.9.55",
-    "@mdi/react": "^1.5.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
-    "@types/d3-selection": "^2.0.0",
-    "@types/d3-zoom": "^2.0.1",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "d3-selection": "^2.0.0",
-    "d3-zoom": "^2.0.0",
-    "lodash": "^4.17.21",
-    "react-tree-graph": "jhasubhash/react-tree-graph#master",
-    "typescript": "^4.1.2",
-    "ui-neumorphism": "^1.1.3",
-    "web-vitals": "^1.0.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-jss": "^10.6.0",
-    "react-modal": "^3.13.1",
-    "react-scripts": "4.0.3"
-  },
-  "peerDependencies": {
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "clean": "rimraf dist",
-    "compile": "npm run clean && cross-env NODE_ENV=production babel src/components --out-dir dist  --presets=@babel/preset-env,@babel/preset-react,@babel/preset-typescript  --extensions .ts,.tsx --copy-files --ignore __tests__,spec.ts,test.ts,stories.ts,__snapshots__",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "overrides": [
-      {
-        "files": [
-          "**/*.stories.*"
-        ],
-        "rules": {
-          "import/no-anonymous-default-export": "off"
-        }
-      }
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
-    "@babel/cli": "^7.13.16",
     "@babel/core": "^7.14.2",
-    "@babel/preset-env": "^7.14.2",
-    "@babel/preset-react": "^7.13.13",
-    "@babel/preset-typescript": "^7.13.0",
+    "@rollup/plugin-commonjs": "^19.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.0",
     "@storybook/addon-actions": "^6.2.9",
     "@storybook/addon-essentials": "^6.2.9",
     "@storybook/addon-links": "^6.2.9",
-    "@storybook/cli": "^6.2.9",
     "@storybook/react": "^6.2.9",
+    "@types/d3-zoom": "^2.0.1",
     "@types/lodash": "^4.14.169",
+    "@types/react": "^17.0.5",
     "@types/react-modal": "^3.12.0",
     "babel-loader": "^8.2.2",
-    "cross-env": "^7.0.3"
+    "postcss": "^8.2.15",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rollup": "^2.48.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.0",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "typescript": "^4.2.4"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "dependencies": {
+    "@mdi/js": "^5.9.55",
+    "@mdi/react": "^1.5.0",
+    "d3-selection": "^2.0.0",
+    "d3-zoom": "^2.0.0",
+    "lodash": "^4.17.21",
+    "react-jss": "^10.6.0",
+    "react-modal": "^3.13.1",
+    "react-tree-graph": "jhasubhash/react-tree-graph#master",
+    "ui-neumorphism": "^1.1.3"
+  },
+  "scripts": {
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "build": "rollup -c"
   }
 }

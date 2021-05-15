@@ -1,28 +1,28 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { IconButton, overrideThemeVariables} from 'ui-neumorphism'
+import { IconButton, overrideThemeVariables } from 'ui-neumorphism'
 import 'ui-neumorphism/dist/index.css'
 import Icon from '@mdi/react'
-import {mdiAccountPlus, mdiCloseThick} from '@mdi/js'
+import { mdiAccountPlus, mdiCloseThick } from '@mdi/js'
 import { createUseStyles } from 'react-jss';
 import Modal from 'react-modal';
 import { Card, CardContent, CardAction, Button, TextField, Divider } from 'ui-neumorphism';
-import { H6, Subtitle2} from 'ui-neumorphism';
-import { cloneDeep } from 'lodash'
+import { Subtitle2 } from 'ui-neumorphism';
+import cloneDeep from 'lodash/cloneDeep'
 import * as constants from './constants'
 
 
 interface EditFormProps {
     theme: string,
-    node : Node,
-    getNextID : () => string;
+    node: Node,
+    getNextID: () => string;
     getNode: (id: string) => Node;
     scrollToElement: (element: HTMLElement) => void;
     setModalElementEditIsOpen: (isOpen: boolean) => void;
-    updateNode: (node: Node, name : string, partner: string, childrenInfo: Map<string, string>) => void;
+    updateNode: (node: Node, name: string, partner: string, childrenInfo: Map<string, string>) => void;
 };
 
 const useStyles = createUseStyles({
-    modalEdit:{
+    modalEdit: {
     },
     modalStyle: {
         display: "flex",
@@ -30,23 +30,23 @@ const useStyles = createUseStyles({
         justifyContent: "center",
         alignItems: "center",
         '&:focus': {
-            outline:0
+            outline: 0
         }
     },
-    modalContent : {
-        maxHeight : "70vh",
-        minHeight : "40vh",
+    modalContent: {
+        maxHeight: "70vh",
+        minHeight: "40vh",
         display: "flex",
         flexDirection: "column",
 
     },
-    modalButton : {
+    modalButton: {
         display: "flex",
         justifyContent: "space-between",
         padding: constants.defaultPadding
     },
-    inSameRow : {
-        display: "flex", 
+    inSameRow: {
+        display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
     },
@@ -65,19 +65,19 @@ let childVewKey = 11;
 export const EditForm = (props: EditFormProps) => {
 
     const { node, getNextID, getNode, scrollToElement, setModalElementEditIsOpen, updateNode } = props;
-    const [activeNode, setActiveNode ] = useState(node);
+    const [activeNode, setActiveNode] = useState(node);
     const [modalIsOpen, setModalIsOpen] = useState(true);
     const [name, setName] = useState(node.name);
     const [partnerName, setPartnerName] = useState(node.partner);
-    const [childrenNames, setChildrenNames] = useState<Map<string, string>>(new Map<string,string>());
+    const [childrenNames, setChildrenNames] = useState<Map<string, string>>(new Map<string, string>());
 
     const classes = useStyles();
     const activeAddElementRef = useRef<HTMLInputElement>(null);
 
-    useEffect(()=>{
-        if(activeAddElementRef.current)
+    useEffect(() => {
+        if (activeAddElementRef.current)
             scrollToElement(activeAddElementRef.current);
-    },[activeNode])
+    }, [activeNode])
 
     const afterModalElementEditIsOpen = () => {
 
@@ -109,7 +109,7 @@ export const EditForm = (props: EditFormProps) => {
 
     const handleChildAdd = (e: any) => {
         let updatedNode = cloneDeep(activeNode);
-        let nextIDtoAssign =  getNextID();
+        let nextIDtoAssign = getNextID();
         updatedNode.children.push(nextIDtoAssign);
         let newNamesObj = cloneDeep(childrenNames);
         newNamesObj.set(nextIDtoAssign, e.value);
@@ -141,43 +141,43 @@ export const EditForm = (props: EditFormProps) => {
             contentLabel="Element Edit Modal"
             style={{
                 overlay: {
-                    backgroundColor: props.theme === "dark"? constants.OVERLAY_DARK_COLOR : constants.OVERLAY_LIGHT_COLOR,
+                    backgroundColor: props.theme === "dark" ? constants.OVERLAY_DARK_COLOR : constants.OVERLAY_LIGHT_COLOR,
                 }
             }}
-            >
-                <Card bordered elevation={5} className={classes.modalEdit} dark={props.theme === "dark"}>
-                <CardContent className={classes.modalContent}> 
+        >
+            <Card bordered elevation={5} className={classes.modalEdit} dark={props.theme === "dark"}>
+                <CardContent className={classes.modalContent}>
                     <span className={classes.inSameRow}>
                         <Subtitle2 dark={props.theme === "dark"}>Name : </Subtitle2>
                         <TextField id={activeNode.id} value={activeNode.name} onChange={onNameChange} dark={props.theme === "dark"}></TextField>
                     </span>
                     <span className={classes.inSameRow}>
                         <Subtitle2 dark={props.theme === "dark"}>Spouse : </Subtitle2>
-                        <TextField id={activeNode.id+'p'} value={activeNode.partner} onChange={onPartnerNameChange} dark={props.theme === "dark"}></TextField>
+                        <TextField id={activeNode.id + 'p'} value={activeNode.partner} onChange={onPartnerNameChange} dark={props.theme === "dark"}></TextField>
                     </span>
-                    <Divider style={{marginBottom:constants.defaultPadding}} dark={props.theme === "dark"}/>
-                    <div key={childVewKey+"cview"} className={classes.childrenEditView}>
-                    { 
-                        activeNode.children.map((id) => {
-                            let name =  childrenNames.get(id) || (getNode(id) ? getNode(id).name : "");
-                            return (
-                                <span className={classes.inSameRow}>
-                                    <Subtitle2 dark={props.theme === "dark"}>Child :</Subtitle2>
-                                    <TextField id={id} value={ name } onChange={(e : any)=>onChildNameChange(e, id)} dark={props.theme === "dark"}></TextField>
-                                    <div style={{padding:constants.defaultPadding}}>
-                                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildRemove(e, id)} dark={props.theme === "dark"}>
-                                        <Icon path={mdiCloseThick} size={0.8} />
-                                    </IconButton>
-                                    </div>
-                                </span>
-                            )
-                        })
-                    }
-                    <div ref={activeAddElementRef}>
-                    <IconButton rounded text={false} size='small' onClick={(e : Event) => handleChildAdd(e)} dark={props.theme === "dark"}>
-                        <Icon path={mdiAccountPlus} size={0.8} />
-                    </IconButton>
-                    </div>
+                    <Divider style={{ marginBottom: constants.defaultPadding }} dark={props.theme === "dark"} />
+                    <div key={childVewKey + "cview"} className={classes.childrenEditView}>
+                        {
+                            activeNode.children.map((id) => {
+                                let name = childrenNames.get(id) || (getNode(id) ? getNode(id).name : "");
+                                return (
+                                    <span className={classes.inSameRow}>
+                                        <Subtitle2 dark={props.theme === "dark"}>Child :</Subtitle2>
+                                        <TextField id={id} value={name} onChange={(e: any) => onChildNameChange(e, id)} dark={props.theme === "dark"}></TextField>
+                                        <div style={{ padding: constants.defaultPadding }}>
+                                            <IconButton rounded text={false} size='small' onClick={(e: Event) => handleChildRemove(e, id)} dark={props.theme === "dark"}>
+                                                <Icon path={mdiCloseThick} size={0.8} />
+                                            </IconButton>
+                                        </div>
+                                    </span>
+                                )
+                            })
+                        }
+                        <div ref={activeAddElementRef}>
+                            <IconButton rounded text={false} size='small' onClick={(e: Event) => handleChildAdd(e)} dark={props.theme === "dark"}>
+                                <Icon path={mdiAccountPlus} size={0.8} />
+                            </IconButton>
+                        </div>
                     </div>
                 </CardContent>
                 <CardAction className={classes.modalButton}>
@@ -188,7 +188,7 @@ export const EditForm = (props: EditFormProps) => {
                         OK
                     </Button>
                 </CardAction>
-                </Card>
-            </Modal>
+            </Card>
+        </Modal>
     )
 }
