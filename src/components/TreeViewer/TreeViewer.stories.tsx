@@ -20,7 +20,9 @@ Primary.args = {
   theme: "Light",
   data: treeData,
   width: "100vw",
-  height: "100vh"
+  height: "100vh",
+  handleShare: () => { },
+  handleFullScreen: () => { },
 };
 
 export const Secondary = Template.bind({});
@@ -28,6 +30,8 @@ Secondary.args = {
   theme: "Dark",
   data: treeData,
   width: "100vw",
-  height: "100vh"
+  height: "100vh",
+  handleShare: () => { },
+  handleFullScreen: () => { },
 };
 

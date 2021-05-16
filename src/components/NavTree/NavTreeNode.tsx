@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { ToggleButton, IconButton, overrideThemeVariables } from 'ui-neumorphism'
 import 'ui-neumorphism/dist/index.css'
-import Icon from '@mdi/react'
 import { mdiArrowDownBold, mdiArrowRightBold, mdiAccountPlus, mdiAccountEdit, mdiCloseThick, mdiAccount, mdiAccountGroup, mdiAccountHeart, mdiAccountSupervisor } from '@mdi/js'
 import { createUseStyles } from 'react-jss';
 import { Subtitle2, Body2 } from 'ui-neumorphism';
 import { EditForm } from './EditForm'
 import * as constants from './constants'
+const Icon = require('@mdi/react').default;
 
 interface NavTreeNodeProps {
     theme: string;

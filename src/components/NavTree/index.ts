@@ -1,2 +1,2 @@
-export { NavTree,  } from './NavTree';
+export { NavTree } from './NavTree';
 export type { NavTreeProps } from './NavTree'

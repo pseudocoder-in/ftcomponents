@@ -1,6 +1,6 @@
 {
   "name": "@pseudocoder-in/ftcomponents",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "homepage": "https://github.com/pseudocoder-in/ftcomponents#readme",
   "private": false,
   "main": "lib/index.js",

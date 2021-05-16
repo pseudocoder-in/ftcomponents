@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { IconButton, overrideThemeVariables } from 'ui-neumorphism'
 import 'ui-neumorphism/dist/index.css'
-import Icon from '@mdi/react'
 import { mdiAccountPlus, mdiCloseThick } from '@mdi/js'
 import { createUseStyles } from 'react-jss';
 import Modal from 'react-modal';
@@ -9,6 +8,7 @@ import { Card, CardContent, CardAction, Button, TextField, Divider } from 'ui-ne
 import { Subtitle2 } from 'ui-neumorphism';
 import cloneDeep from 'lodash/cloneDeep'
 import * as constants from './constants'
+const Icon = require('@mdi/react').default;
 
 
 interface EditFormProps {
@@ -38,8 +38,8 @@ const useStyles = createUseStyles({
         height: '75%'
     },
     modalContent: {
-        maxHeight: "50vh",
-        minHeight: "50vh",
+        maxHeight: "40vh",
+        minHeight: "30vh",
         display: "flex",
         flexDirection: "column",
     },

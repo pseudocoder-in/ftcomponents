@@ -5,9 +5,9 @@ import { zoom, ZoomBehavior, zoomIdentity, zoomTransform } from 'd3-zoom';
 import { select, selectAll } from 'd3-selection';
 import { Card, TextField, IconButton } from 'ui-neumorphism';
 import cloneDeep from 'lodash/cloneDeep';
-import Icon from '@mdi/react'
 import { mdiShareVariant, mdiFullscreen, mdiFullscreenExit } from '@mdi/js'
 import './style.css'
+const Icon = require('@mdi/react').default;
 
 interface Data {
     [id: string]: Node;
@@ -66,8 +66,9 @@ export const TreeViewer = (props: TreeViewerProps) => {
         if (activateTree) {
             zoomRef = zoom().on("zoom", zoomed);
             selectAll('svg').each(function () {
-                select(this).call(zoomRef as any)
-                    .on("dblclick.zoom", null)
+                if ((this as any).classList.contains('custom'))
+                    select(this).call(zoomRef as any)
+                        .on("dblclick.zoom", null)
             });
         }
     }, [activateTree]);
@@ -177,17 +178,15 @@ export const TreeViewer = (props: TreeViewerProps) => {
     }
 
     const handleFullScreenClick = (e: any) => {
-        e.preventDefault();
         props.handleFullScreen();
     }
 
     const handleShareClick = (e: any) => {
-        e.preventDefault();
         props.handleShare();
     }
 
     return (
-        <div ref={componentRef}>
+        <div className={classes.wrapper} ref={componentRef}>
             <Card className={classes.wrapper} dark={theme === 'dark'}>
                 <TextField label={"Search ..."} style={{ display: 'block', right: 0, background: 'transparent', position: 'absolute' }} onChange={onSearching} />
                 {activateTree &&
@@ -214,11 +213,11 @@ export const TreeViewer = (props: TreeViewerProps) => {
                     />
                 }
                 <div style={{ display: 'block', padding: "10px", right: 0, bottom: 0, background: 'transparent', position: 'absolute' }}>
-                    <IconButton color='var(--primary)' rounded outlined dark={theme === 'dark'} onClick={handleShareClick}>
+                    <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleShareClick}>
                         <Icon path={mdiShareVariant} size={0.8} />
                     </IconButton>
                     <span>&nbsp;&nbsp;</span>
-                    <IconButton color='var(--primary)' rounded outlined dark={theme === 'dark'} onClick={handleFullScreenClick}>
+                    <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleFullScreenClick}>
                         <Icon path={mdiFullscreen} size={0.8} />
                     </IconButton>
                 </div>
