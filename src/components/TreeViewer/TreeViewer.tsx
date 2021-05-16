@@ -7,7 +7,6 @@ import { Card, TextField, IconButton } from 'ui-neumorphism';
 import cloneDeep from 'lodash/cloneDeep';
 import Icon from '@mdi/react'
 import { mdiShareVariant, mdiFullscreen, mdiFullscreenExit } from '@mdi/js'
-//import * as constants from '../NavTree/constants'
 import './style.css'
 
 interface Data {
@@ -180,13 +179,11 @@ export const TreeViewer = (props: TreeViewerProps) => {
     const handleFullScreenClick = (e: any) => {
         e.preventDefault();
         props.handleFullScreen();
-        console.log("full")
     }
 
     const handleShareClick = (e: any) => {
         e.preventDefault();
         props.handleShare();
-        console.log("shared")
     }
 
     return (

@@ -11,9 +11,19 @@ UI Component to load and edit the JSON data which is structured to create a tree
 <img width="450" alt="Screenshot 2021-05-15 at 3 06 58 AM" src="https://user-images.githubusercontent.com/83978810/118334143-9ea80f00-b52a-11eb-8450-245a3d55332e.png">
 
 ```JS
-import { NavTreeNode } from '@subhashjha/ftcomponents';
+import { NavTree } from '@subhashjha/ftcomponents';
 ```
 
+#### Usage
+
+```JS
+<NavTree 
+    theme: "dark",
+    data: treeData,
+    width: "100vw",
+    height: "100vh"
+/>
+```
 <br>
 
 ### TreeViewer
@@ -25,8 +35,20 @@ Component to load the tree json data and display it in a tree like structure. It
 ```JS
 import { TreeViewer } from '@subhashjha/ftcomponents';
 ```
+#### Usage
 
-### Sample Input Data (in JSON format)
+```JS
+<TreeViewer 
+    theme: "dark",
+    data: treeData,
+    width: "100vw",
+    height: "100vh"
+/>
+```
+
+<br>
+
+### Sample Input Data (treeData)
 
 ```JSON
 {
@@ -87,3 +109,14 @@ import { TreeViewer } from '@subhashjha/ftcomponents';
     }
 }
 ```
+<br>
+
+### Building from codes
+- Clone the repository
+- Run `npm install`
+- Run `yarn storybook` for viewing the Componenents
+- Run `yarn build` to create a buld in `dist` folder
+
+<br>
+
+> More customization coming soon ... :smile:

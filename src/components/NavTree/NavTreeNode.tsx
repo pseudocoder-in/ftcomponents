@@ -72,16 +72,12 @@ const useStyles = createUseStyles({
 
 export const NavTreeNode = (props: NavTreeNodeProps) => {
     const { node, getChildNodes, level, onToggle, onNodeSelect, margin, elementStyle, editButtonStyle, getNextID, getNode, removeNode } = props;
-    //const [activeNodeID, setActiveNodeID ] = useState("0");
-    //const [activeNode, setActiveNode ] = useState(node);
     const [modalElementEditIsOpen, setModalElementEditIsOpen] = useState(false);
     const classes = useStyles({ margin, level });
     const activeElementRef = useRef<HTMLInputElement>(null);
-    //const activeAddElementRef = useRef<HTMLInputElement>(null);
-    //const [isOpen, setIsOpen ] = useState(node);
 
     useEffect(() => {
-        overrideThemeVariables({
+        /*overrideThemeVariables({
             '--light-bg': '#e4ebf5',
             '--light-bg-dark-shadow': '#bec8e4',
             '--light-bg-light-shadow': '#ffffff',
@@ -89,7 +85,7 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
             '--dark-bg': '#444444',
             '--dark-bg-dark-shadow': '#363636',
             '--dark-bg-light-shadow': '#525252',
-        })
+        })*/
         if (activeElementRef.current)
             scrollToElement(activeElementRef.current);
     }, [])
