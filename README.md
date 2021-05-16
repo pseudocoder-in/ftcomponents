@@ -10,18 +10,18 @@ UI Component to load and edit the JSON data which is structured to create a tree
 <img width="450" alt="Screenshot 2021-05-15 at 3 06 12 AM" src="https://user-images.githubusercontent.com/83978810/118334093-846e3100-b52a-11eb-9ef8-de7432f8d654.png">
 <img width="450" alt="Screenshot 2021-05-15 at 3 06 58 AM" src="https://user-images.githubusercontent.com/83978810/118334143-9ea80f00-b52a-11eb-8450-245a3d55332e.png">
 
-```JS
-import { NavTree } from '@subhashjha/ftcomponents';
-```
-
 #### Usage
 
 ```JS
+import { NavTree } from '@subhashjha/ftcomponents';
+```
+```JS
 <NavTree 
-    theme: "dark",
-    data: treeData,
+    theme: "dark", // light/dark
+    data: treeData, // Tree data in Json format
     width: "100vw",
-    height: "100vh"
+    height: "100vh",
+    onSave: {(updatedJsonData) => { /* Handle updated data in the client side*/}}
 />
 ```
 <br>
@@ -32,15 +32,15 @@ Component to load the tree json data and display it in a tree like structure. It
 
 ![treeviewer](https://user-images.githubusercontent.com/83978810/118334685-ae742300-b52b-11eb-8a76-e7959b7365b4.gif)
 
-```JS
-import { TreeViewer } from '@subhashjha/ftcomponents';
-```
 #### Usage
 
 ```JS
+import { TreeViewer } from '@subhashjha/ftcomponents';
+```
+```JS
 <TreeViewer 
-    theme: "dark",
-    data: treeData,
+    theme: "dark", // light/dark
+    data: treeData, // Tree data in Json format
     width: "100vw",
     height: "100vh"
 />

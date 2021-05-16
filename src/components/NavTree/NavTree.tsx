@@ -29,7 +29,7 @@ const useStyles = createUseStyles({
         overflow: 'hidden',
     },
     innerWrapper: {
-        width: '100vw',
+        width: '100%',
         flexGrow: 1,
         display: 'flex',
         flexDirection: 'column',
@@ -184,6 +184,8 @@ export const NavTree = (props: NavTreeProps) => {
                         getNextID={generateNextID}
                         updateNode={updateNode}
                         removeNode={removeNode}
+                        height={height}
+                        width={width}
                     />
                 ))}
             </Card>

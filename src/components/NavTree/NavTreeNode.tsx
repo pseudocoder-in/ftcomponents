@@ -22,6 +22,8 @@ interface NavTreeNodeProps {
     getNextID: () => string;
     updateNode: (node: Node, name: string, partner: string, childrenInfo: Map<string, string>) => void;
     removeNode: (node: Node) => void;
+    height: string;
+    width: string;
 }
 
 const useStyles = createUseStyles({
@@ -36,7 +38,7 @@ const useStyles = createUseStyles({
     },
     modalStyle: {
         display: "flex",
-        paddingTop: "10vh",
+        paddingTop: "10%",
         justifyContent: "center",
         alignItems: "center",
         '&:focus': {
@@ -44,8 +46,8 @@ const useStyles = createUseStyles({
         }
     },
     modalContent: {
-        maxHeight: "70vh",
-        minHeight: "40vh",
+        maxHeight: "70%",
+        minHeight: "40%",
         display: "flex",
         flexDirection: "column",
 

@@ -19,6 +19,8 @@ interface EditFormProps {
     scrollToElement: (element: HTMLElement) => void;
     setModalElementEditIsOpen: (isOpen: boolean) => void;
     updateNode: (node: Node, name: string, partner: string, childrenInfo: Map<string, string>) => void;
+    height: string;
+    width: string;
 };
 
 const useStyles = createUseStyles({
@@ -26,19 +28,20 @@ const useStyles = createUseStyles({
     },
     modalStyle: {
         display: "flex",
-        paddingTop: "10vh",
+        paddingTop: "10%",
         justifyContent: "center",
         alignItems: "center",
         '&:focus': {
             outline: 0
-        }
+        },
+        width: (props: { width: string; height: string }) => props.width,
+        height: '75%'
     },
     modalContent: {
-        maxHeight: "70vh",
-        minHeight: "40vh",
+        maxHeight: "50vh",
+        minHeight: "50vh",
         display: "flex",
         flexDirection: "column",
-
     },
     modalButton: {
         display: "flex",
@@ -71,7 +74,8 @@ export const EditForm = (props: EditFormProps) => {
     const [partnerName, setPartnerName] = useState(node.partner);
     const [childrenNames, setChildrenNames] = useState<Map<string, string>>(new Map<string, string>());
 
-    const classes = useStyles();
+    let { width, height } = props;
+    const classes = useStyles({ width, height });
     const activeAddElementRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -161,7 +165,7 @@ export const EditForm = (props: EditFormProps) => {
                             activeNode.children.map((id) => {
                                 let name = childrenNames.get(id) || (getNode(id) ? getNode(id).name : "");
                                 return (
-                                    <span className={classes.inSameRow}>
+                                    <span key={id} className={classes.inSameRow}>
                                         <Subtitle2 dark={props.theme === "dark"}>Child :</Subtitle2>
                                         <TextField id={id} value={name} onChange={(e: any) => onChildNameChange(e, id)} dark={props.theme === "dark"}></TextField>
                                         <div style={{ padding: constants.defaultPadding }}>

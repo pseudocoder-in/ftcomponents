@@ -1,6 +1,6 @@
 {
   "name": "@pseudocoder-in/ftcomponents",
-  "version": "0.1.9",
+  "version": "0.1.0",
   "homepage": "https://github.com/pseudocoder-in/ftcomponents#readme",
   "private": false,
   "main": "lib/index.js",
@@ -22,7 +22,9 @@
   "keywords": [
     "reactjs",
     "neumorphism",
-    "UI"
+    "UI",
+    "JSON",
+    "Tree"
   ],
   "devDependencies": {
     "@babel/core": "^7.14.2",
