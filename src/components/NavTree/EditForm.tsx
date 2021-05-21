@@ -8,17 +8,18 @@ import { Card, CardContent, CardAction, Button, TextField, Divider } from 'ui-ne
 import { Subtitle2 } from 'ui-neumorphism';
 import cloneDeep from 'lodash/cloneDeep'
 import * as constants from './constants'
+import { TreeNode } from './types';
 const Icon = require('@mdi/react').default;
 
 
 interface EditFormProps {
     theme: string,
-    node: Node,
+    node: TreeNode,
     getNextID: () => string;
-    getNode: (id: string) => Node;
+    getNode: (id: string) => TreeNode;
     scrollToElement: (element: HTMLElement) => void;
     setModalElementEditIsOpen: (isOpen: boolean) => void;
-    updateNode: (node: Node, name: string, partner: string, childrenInfo: Map<string, string>) => void;
+    updateNode: (node: TreeNode, name: string, partner: string, childrenInfo: Map<string, string>) => void;
     height: string;
     width: string;
 };

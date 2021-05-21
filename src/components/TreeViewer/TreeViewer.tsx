@@ -27,8 +27,8 @@ export interface TreeViewerProps {
     data: any;
     width: string;
     height: string;
-    handleShare: () => void;
-    handleFullScreen: () => void;
+    handleShare?: () => void;
+    handleFullScreen?: () => void;
 }
 
 const useStyles = createUseStyles({
@@ -57,7 +57,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
     const classes = useStyles({ width, height });
 
     useEffect(() => {
-        convertJSONtoD3Heirarchy(props.data);
+        convertTreeNodeDatatoD3Heirarchy(props.data);
         setTreeWidth(componentRef.current?.offsetWidth!);
         setTreeHeight(componentRef.current?.offsetHeight!);
         setTreeActive(true);
@@ -71,7 +71,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
                         .on("dblclick.zoom", null)
             });
         }
-    }, [activateTree]);
+    }, [activateTree, props]);
 
     const getNextID = () => {
         ++nextID;
@@ -103,7 +103,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
         })
     }
 
-    const convertJSONtoD3Heirarchy = (data: any) => {
+    const convertTreeNodeDatatoD3Heirarchy = (data: any) => {
         //get root node
         let root = {} as D3Node;
         let nodes = cloneDeep(data);
@@ -178,11 +178,13 @@ export const TreeViewer = (props: TreeViewerProps) => {
     }
 
     const handleFullScreenClick = (e: any) => {
-        props.handleFullScreen();
+        if (props.handleFullScreen)
+            props.handleFullScreen();
     }
 
     const handleShareClick = (e: any) => {
-        props.handleShare();
+        if (props.handleShare)
+            props.handleShare();
     }
 
     return (
@@ -213,13 +215,13 @@ export const TreeViewer = (props: TreeViewerProps) => {
                     />
                 }
                 <div style={{ display: 'block', padding: "10px", right: 0, bottom: 0, background: 'transparent', position: 'absolute' }}>
-                    <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleShareClick}>
+                    {props.handleShare && <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleShareClick}>
                         <Icon path={mdiShareVariant} size={0.8} />
-                    </IconButton>
+                    </IconButton>}
                     <span>&nbsp;&nbsp;</span>
-                    <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleFullScreenClick}>
+                    {props.handleFullScreen && <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleFullScreenClick}>
                         <Icon path={mdiFullscreen} size={0.8} />
-                    </IconButton>
+                    </IconButton>}
                 </div>
             </Card>
         </div>

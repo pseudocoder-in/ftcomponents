@@ -6,22 +6,22 @@ import { createUseStyles } from 'react-jss';
 import { Subtitle2, Body2 } from 'ui-neumorphism';
 import { EditForm } from './EditForm'
 import * as constants from './constants'
+import { TreeNode } from './types';
 const Icon = require('@mdi/react').default;
 
 interface NavTreeNodeProps {
     theme: string;
-    node: Node;
+    node: TreeNode;
     margin: number;
-    getChildNodes: (node: Node) => Array<Node>;
-    getNode: (id: string) => Node;
-    onToggle: (node: Node) => void;
-    onNodeSelect: (node: Node) => void;
+    getChildNodes: (node: TreeNode) => Array<TreeNode>;
+    getNode: (id: string) => TreeNode;
+    onToggle: (node: TreeNode) => void;
     level: number;
     elementStyle: any;
     editButtonStyle: any;
     getNextID: () => string;
-    updateNode: (node: Node, name: string, partner: string, childrenInfo: Map<string, string>) => void;
-    removeNode: (node: Node) => void;
+    updateNode: (node: TreeNode, name: string, partner: string, childrenInfo: Map<string, string>) => void;
+    removeNode: (node: TreeNode) => void;
     height: string;
     width: string;
 }
@@ -73,7 +73,7 @@ const useStyles = createUseStyles({
 });
 
 export const NavTreeNode = (props: NavTreeNodeProps) => {
-    const { node, getChildNodes, level, onToggle, onNodeSelect, margin, elementStyle, editButtonStyle, getNextID, getNode, removeNode } = props;
+    const { node, getChildNodes, level, onToggle, margin, elementStyle, editButtonStyle, getNextID, getNode, removeNode } = props;
     const [modalElementEditIsOpen, setModalElementEditIsOpen] = useState(false);
     const classes = useStyles({ margin, level });
     const activeElementRef = useRef<HTMLInputElement>(null);

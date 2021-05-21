@@ -4,18 +4,19 @@ import { Card, TextField, Button } from 'ui-neumorphism';
 import { createUseStyles } from 'react-jss';
 import { NavTreeNode } from './NavTreeNode';
 import * as constants from './constants';
+import { TreeNode } from './types';
 
 export interface NavTreeProps {
     theme: string;
     data: any;
-    onSelect?: (node: Node) => void;
     width: string;
     height: string;
     onSave?: (data: any) => void;
+    onUpdate?: (data: any) => void;
 }
 
 interface Data {
-    [id: string]: Node;
+    [id: string]: TreeNode;
 }
 
 
@@ -26,7 +27,8 @@ const useStyles = createUseStyles({
         minHeight: (props: { width: string; height: string }) => props.height,
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
+        overflow: 'auto',
+        padding: '2vh'
     },
     innerWrapper: {
         width: '100%',
@@ -35,7 +37,7 @@ const useStyles = createUseStyles({
         flexDirection: 'column',
         scrollBehavior: 'auto',
         overflow: 'auto',
-
+        padding: '2vh'
     }
 });
 
@@ -56,8 +58,9 @@ export const NavTree = (props: NavTreeProps) => {
         if (props.theme)
             setTheme(props.theme.toLowerCase());
         //parse the data passed from the client;
-        parseJsonData(props.data);
-    }, []);
+        parseTreeData(props.data);
+        componentId++; //Hack because ToggleButton is not changing on active property
+    }, [props]);
 
     const replacer = (key: string, value: any) => {
         if (key == "isOpen") return undefined;
@@ -76,11 +79,11 @@ export const NavTree = (props: NavTreeProps) => {
         setNodes(cloneDeep(orgNodes));
     }
 
-    const parseJsonData = (data: any) => {
+    const parseTreeData = (data: any) => {
         let nodes = cloneDeep(data);
         for (let key in nodes) {
             nodes[key].isOpen = false;
-            nodes[key].isRoot = nodes[key].hasOwnProperty("isRoot") ? nodes[key].isRoot == 'true' : false;
+            nodes[key].isRoot = nodes[key].hasOwnProperty("isRoot") ? nodes[key].isRoot : false;
             id = Math.max(Number(key), id);
         }
         setNodes(nodes as Data);
@@ -94,12 +97,12 @@ export const NavTree = (props: NavTreeProps) => {
 
     const getRootNodes = () => {
         if (searchName) {
-            return values(nodes).filter((node: Node) => node.name.toLowerCase().startsWith(searchName));
+            return values(nodes).filter((node: TreeNode) => node.name.toLowerCase().startsWith(searchName));
         }
-        return values(nodes).filter((node: Node) => node.isRoot === true);
+        return values(nodes).filter((node: TreeNode) => node.isRoot === true);
     }
 
-    const getChildNodes = (node: Node) => {
+    const getChildNodes = (node: TreeNode) => {
         if (!node.children) return [];
         return node.children.map(id => nodes[id]);
     }
@@ -108,7 +111,7 @@ export const NavTree = (props: NavTreeProps) => {
         return nodes[id];
     }
 
-    const updateNode = (node: Node, name: string, partnerName: string, childrenInfo: Map<string, string>) => {
+    const updateNode = (node: TreeNode, name: string, partnerName: string, childrenInfo: Map<string, string>) => {
         nodes[node.id].name = name;
         nodes[node.id].partner = partnerName;
         nodes[node.id].children = node.children;
@@ -119,13 +122,15 @@ export const NavTree = (props: NavTreeProps) => {
                 nodes[key].name = value || "";
         })
         setNodes({ ...nodes });
+        if (props.onUpdate)
+            props.onUpdate(nodes);
     }
 
     const getParent = (id: string) => {
-        return values(nodes).filter((node: Node) => node.children.includes(id))[0];
+        return values(nodes).filter((node: TreeNode) => node.children.includes(id))[0];
     }
 
-    const removeNode = (node: Node) => {
+    const removeNode = (node: TreeNode) => {
         let parentNode = getParent(node.id);
         if (!parentNode) {
             // TO DO: Handle root node deletion
@@ -135,7 +140,7 @@ export const NavTree = (props: NavTreeProps) => {
         setNodes({ ...nodes });
     }
 
-    const closeNodesRecursive = (node: Node) => {
+    const closeNodesRecursive = (node: TreeNode) => {
         nodes[node.id].isOpen = false;
         getChildNodes(node).map(childNode => {
             if (childNode.isOpen) {
@@ -145,7 +150,7 @@ export const NavTree = (props: NavTreeProps) => {
         });
     }
 
-    const onToggle = (node: Node) => {
+    const onToggle = (node: TreeNode) => {
         if (node.isOpen) { //close all open child nodes repectively
             closeNodesRecursive(node);
         } else {
@@ -154,13 +159,6 @@ export const NavTree = (props: NavTreeProps) => {
         setNodes({ ...nodes });
     }
 
-    const onNodeSelect = (node: Node) => {
-        if (props.onSelect) {
-            props.onSelect(node);
-        } else {
-
-        }
-    }
 
     const onSearching = (e: any) => {
         let searchName = e.value.toLowerCase();
@@ -169,30 +167,23 @@ export const NavTree = (props: NavTreeProps) => {
 
     const rootNodes = getRootNodes();
     return (
-        <Card bordered className={classes.wrapper} dark={theme === "dark"}>
+        <Card bordered key={componentId + "view"} className={classes.wrapper} dark={theme === "dark"}>
             <TextField label={"Search ..."} style={{ justifyContent: 'flex-end' }} onChange={onSearching} />
-            <Card key={componentId + "view"} bordered className={classes.innerWrapper} dark={theme === "dark"}>
-                {rootNodes.map((node: Node) => (
-                    <NavTreeNode
-                        theme={theme}
-                        key={node.id}
-                        node={node}
-                        getChildNodes={getChildNodes}
-                        getNode={getNode}
-                        onToggle={onToggle}
-                        onNodeSelect={onNodeSelect}
-                        getNextID={generateNextID}
-                        updateNode={updateNode}
-                        removeNode={removeNode}
-                        height={height}
-                        width={width}
-                    />
-                ))}
-            </Card>
-            <div style={{ display: 'flex', justifyContent: 'center', padding: constants.defaultPadding, columnGap: constants.defaultPadding }} >
-                <Button dark={theme === "dark"} style={{ width: "120px" }} onClick={resetTreeData}> Reset</Button>
-                <Button dark={theme === "dark"} style={{ width: "120px" }} onClick={saveTreeData}> Save</Button>
-            </div>
+            {rootNodes.map((node: TreeNode) => (
+                <NavTreeNode
+                    theme={theme}
+                    key={node.id}
+                    node={node}
+                    getChildNodes={getChildNodes}
+                    getNode={getNode}
+                    onToggle={onToggle}
+                    getNextID={generateNextID}
+                    updateNode={updateNode}
+                    removeNode={removeNode}
+                    height={height}
+                    width={width}
+                />
+            ))}
         </Card>
     )
 }

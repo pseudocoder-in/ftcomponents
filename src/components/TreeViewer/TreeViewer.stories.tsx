@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
 import { TreeViewer, TreeViewerProps } from './TreeViewer';
-import { default as treeData } from '../../assets/treeData.json';
+import { treeData } from '../../assets/treedata';
 
 export default {
   title: 'TreeViewer',
@@ -32,6 +32,5 @@ Secondary.args = {
   width: "100vw",
   height: "100vh",
   handleShare: () => { },
-  handleFullScreen: () => { },
 };
 

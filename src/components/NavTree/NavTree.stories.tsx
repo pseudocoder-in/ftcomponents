@@ -2,7 +2,7 @@ import React from 'react';
 import { Story, Meta } from '@storybook/react';
 
 import { NavTree, NavTreeProps } from './NavTree';
-import { default as treeData } from '../../assets/treeData.json';
+import { treeData } from '../../assets/treedata';
 
 export default {
   title: 'NavTree',
@@ -20,7 +20,8 @@ Primary.args = {
   theme: "light",
   data: treeData,
   width: "100vw",
-  height: "100vh"
+  height: "100vh",
+  onUpdate: (data) => { console.log(data) }
 };
 
 export const Secondary = Template.bind({});
@@ -28,6 +29,7 @@ Secondary.args = {
   theme: "dark",
   data: treeData,
   width: "100vw",
-  height: "100vh"
+  height: "100vh",
+  onUpdate: (data) => { console.log(data) }
 };
 
