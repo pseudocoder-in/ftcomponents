@@ -6,14 +6,15 @@
 
 ### NavTree
 
-UI Component to load and edit the JSON data which is structured to create a tree easily.
-<img width="450" alt="Screenshot 2021-05-15 at 3 06 12 AM" src="https://user-images.githubusercontent.com/83978810/118334093-846e3100-b52a-11eb-9ef8-de7432f8d654.png">
-<img width="450" alt="Screenshot 2021-05-15 at 3 06 58 AM" src="https://user-images.githubusercontent.com/83978810/118334143-9ea80f00-b52a-11eb-8450-245a3d55332e.png">
+UI Component to load and edit the tree data.
+<img width="843" alt="Screenshot 2021-05-21 at 1 33 13 PM" src="https://user-images.githubusercontent.com/83978810/119103966-5c566480-ba39-11eb-9f17-ae30438d5b0d.png">
+<img width="841" alt="Screenshot 2021-05-21 at 1 33 59 PM" src="https://user-images.githubusercontent.com/83978810/119103985-60828200-ba39-11eb-9551-d9e2312cf935.png">
+
 
 #### Usage
 
 ```JS
-import { NavTree } from '@subhashjha/ftcomponents';
+import { NavTree } from '@pseudocoder-in/ftcomponents';
 ```
 ```JS
 <NavTree 
@@ -21,7 +22,7 @@ import { NavTree } from '@subhashjha/ftcomponents';
     data: treeData, // Tree data in Json format
     width: "100vw",
     height: "100vh",
-    onSave: {(updatedJsonData) => { /* Handle updated data in the client side*/}}
+    onUpdate: {(updatedTreeData) => { /* Handle updated data in the client side*/}}
 />
 ```
 <br>
@@ -35,14 +36,16 @@ Component to load the tree json data and display it in a tree like structure. It
 #### Usage
 
 ```JS
-import { TreeViewer } from '@subhashjha/ftcomponents';
+import { TreeViewer } from '@pseudocoder-in/ftcomponents';
 ```
 ```JS
 <TreeViewer 
     theme: "dark", // light/dark
     data: treeData, // Tree data in Json format
     width: "100vw",
-    height: "100vh"
+    height: "100vh",
+    handleShare: () => { }, //Optional parameter
+    handleFullScreen: () => { } //Optional parameter
 />
 ```
 
@@ -50,63 +53,40 @@ import { TreeViewer } from '@subhashjha/ftcomponents';
 
 ### Sample Input Data (treeData)
 
-```JSON
-{
+```JS
+export const treeData = {
     "1":{
-        "id" : "1",
-        "name" : "Rajev Gupta",
-        "children" : ["2", "3"],
-        "isRoot" : "true",
-        "partner" : "Aastha Gupta"
+        id:"1",
+        name:"Rajeev Gupta",
+        partner:" Nita Gupta",
+        children:["2","3","4"],
+        isRoot: true
     },
     "2":{
-        "id" : "2",
-        "name" : "Sanjeev kumar Gupta",
-        "children" : [],
-        "partner" : "Chaaru Gupta"
+        id:"2",
+        name:"Aalok kumar Gupta",
+        partner:"Rhea Gupta",
+        children:["5"],
     },
     "3":{
-        "id" : "3",
-        "name" : "Abhishek kumar Gupta",
-        "children" : ["4", "5", "6"],
-        "partner" : "Malaika Gupta"
+        id:"3",
+        name:"Sanjeev Gupta",
+        partner:"Roshani Gupta",
+        children:[],
     },
     "4":{
-        "id" : "4",
-        "name" : "Anirudh Gupta",
-        "children" : [],
-        "partner" : "Aasha Gupta"
+        id:"4",
+        name:"Robin Gupta",
+        partner:"Raashi Gupta",
+        children:[],
     },
     "5":{
-        "id" : "5",
-        "name" : "Kamlesh Gupta",
-        "children" : [],
-        "partner" : "Radhika Gupta"
+        id:"5",
+        name:"Sorabh Gupta",
+        partner:"",
+        children:[],
     },
-    "6":{
-        "id" : "6",
-        "name" : "Akhilesh kumar Gupta",
-        "children" : ["7"],
-        "partner" : "Aarju Gupta"
-    },
-    "7":{
-        "id" : "7",
-        "name" : "Lokesh Gupta",
-        "children" : ["8", "9"],
-        "partner" : "Kalyani Gupta"
-    },
-    "8":{
-        "id" : "8",
-        "name" : "Rahul Gupta",
-        "children" : [],
-        "partner" : "Roshani Gupta"
-    },
-    "9":{
-        "id" : "9",
-        "name" : "Yahlika Gupta",
-        "children" : [],
-        "partner" : "Saurabh Gupta"
-    }
+
 }
 ```
 <br>
