@@ -154,6 +154,8 @@ export const NavTree = (props: NavTreeProps) => {
         }
         nodes[parentNode.id].children = nodes[parentNode.id].children.filter((id) => id !== node.id);
         setNodes({ ...nodes });
+        if (props.onUpdate)
+            props.onUpdate(nodes);
     }
 
     const closeNodesRecursive = (node: TreeNode) => {

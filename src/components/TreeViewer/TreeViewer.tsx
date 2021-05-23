@@ -216,7 +216,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
                 }
                 <div style={{ display: 'block', padding: "10px", right: 0, bottom: 0, background: 'transparent', position: 'absolute' }}>
                     {props.handleShare &&
-                    <Tooltip dark={theme === 'dark'}top inset content={<div>Share your family tree</div>}>
+                    <Tooltip dark={theme === 'dark'}top content={<div>Share your family tree</div>}>
                         <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleShareClick}>
                             <Icon path={mdiShareVariant} size={0.8} />
                         </IconButton>

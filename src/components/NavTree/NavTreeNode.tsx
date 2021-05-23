@@ -148,7 +148,7 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
                         <Icon path={mdiCloseThick} size={0.8} />
                     </IconButton>
                     {node.isRoot && 
-                        <Tooltip dark={props.theme === "dark"} top inset content={<div>Add Parent</div>}>
+                        <Tooltip dark={props.theme === "dark"} top content={<div>Add Parent</div>}>
                             <IconButton rounded text={false} size='small' onClick={handleParentAdd} dark={props.theme === "dark"}>
                                 <Icon path={mdiArrowUpBold} size={0.8} />
                             </IconButton>
