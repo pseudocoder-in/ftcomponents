@@ -117,11 +117,12 @@ export const NavTree = (props: NavTreeProps) => {
         nodes[node.id].children = node.children;
         childrenInfo.forEach((value, key) => {
             if (!nodes[key])
-                nodes[key] = { id: key, name: value, children: [] } as any;
+                nodes[key] = { id: key, name: value, children: [], partner:"" } as any;
             else
                 nodes[key].name = value || "";
         })
         setNodes({ ...nodes });
+        //TO DO: remove isOpen Property from node before sending it to client
         if (props.onUpdate)
             props.onUpdate(nodes);
     }
