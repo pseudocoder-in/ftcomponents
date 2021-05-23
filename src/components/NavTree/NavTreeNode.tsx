@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { ToggleButton, IconButton, overrideThemeVariables } from 'ui-neumorphism'
+import { ToggleButton, IconButton, overrideThemeVariables, Tooltip } from 'ui-neumorphism'
 import 'ui-neumorphism/dist/index.css'
-import { mdiArrowDownBold, mdiArrowRightBold, mdiAccountPlus, mdiAccountEdit, mdiCloseThick, mdiAccount, mdiAccountGroup, mdiAccountHeart, mdiAccountSupervisor } from '@mdi/js'
+import { mdiArrowDownBold, mdiArrowRightBold, mdiAccountPlus, mdiAccountEdit, mdiCloseThick, mdiAccount, mdiAccountGroup, mdiAccountHeart, mdiAccountSupervisor, mdiArrowUpBold } from '@mdi/js'
 import { createUseStyles } from 'react-jss';
 import { Subtitle2, Body2 } from 'ui-neumorphism';
 import { EditForm } from './EditForm'
@@ -22,6 +22,7 @@ interface NavTreeNodeProps {
     getNextID: () => string;
     updateNode: (node: TreeNode, name: string, partner: string, childrenInfo: Map<string, string>) => void;
     removeNode: (node: TreeNode) => void;
+    addParent: (node: TreeNode) => void;
     height: string;
     width: string;
 }
@@ -73,7 +74,7 @@ const useStyles = createUseStyles({
 });
 
 export const NavTreeNode = (props: NavTreeNodeProps) => {
-    const { node, getChildNodes, level, onToggle, margin, elementStyle, editButtonStyle, getNextID, getNode, removeNode } = props;
+    const { node, getChildNodes, level, onToggle, margin, elementStyle, editButtonStyle, getNextID, getNode, removeNode , addParent} = props;
     const [modalElementEditIsOpen, setModalElementEditIsOpen] = useState(false);
     const classes = useStyles({ margin, level });
     const activeElementRef = useRef<HTMLInputElement>(null);
@@ -113,7 +114,10 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
     const handleElementRemove = (e: any) => {
         removeNode(node);
     }
-
+    
+    const handleParentAdd= (e:any) => {
+        addParent(node);
+    }
 
     const getElementToRender = () => {
         return (
@@ -143,6 +147,13 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
                     <IconButton rounded text={false} size='small' onClick={(e: Event) => handleElementRemove(e)} dark={props.theme === "dark"}>
                         <Icon path={mdiCloseThick} size={0.8} />
                     </IconButton>
+                    {node.isRoot && 
+                        <Tooltip dark={props.theme === "dark"} top inset content={<div>Add Parent</div>}>
+                            <IconButton rounded text={false} size='small' onClick={handleParentAdd} dark={props.theme === "dark"}>
+                                <Icon path={mdiArrowUpBold} size={0.8} />
+                            </IconButton>
+                        </Tooltip>
+                    }
                 </div>
             </div>
 

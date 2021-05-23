@@ -126,6 +126,22 @@ export const NavTree = (props: NavTreeProps) => {
             props.onUpdate(nodes);
     }
 
+    const addParent = (node: TreeNode) => {
+        nodes[node.id].isRoot = false;
+        let parentNode = {
+            id : generateNextID(),
+            name : "Add Name",
+            partner: "",
+            children: [node.id],
+            isRoot: true,
+            isOpen: true
+        }
+        nodes[parentNode.id] = parentNode;
+        setNodes({...nodes});
+        if (props.onUpdate)
+            props.onUpdate(nodes);
+    }
+
     const getParent = (id: string) => {
         return values(nodes).filter((node: TreeNode) => node.children.includes(id))[0];
     }
@@ -180,6 +196,7 @@ export const NavTree = (props: NavTreeProps) => {
                     getNextID={generateNextID}
                     updateNode={updateNode}
                     removeNode={removeNode}
+                    addParent={addParent}
                     height={height}
                     width={width}
                 />

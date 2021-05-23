@@ -3,7 +3,7 @@ import { createUseStyles } from 'react-jss';
 import Tree from 'react-tree-graph';
 import { zoom, ZoomBehavior, zoomIdentity, zoomTransform } from 'd3-zoom';
 import { select, selectAll } from 'd3-selection';
-import { Card, TextField, IconButton } from 'ui-neumorphism';
+import { Card, TextField, IconButton, Tooltip } from 'ui-neumorphism';
 import cloneDeep from 'lodash/cloneDeep';
 import { mdiShareVariant, mdiFullscreen, mdiFullscreenExit } from '@mdi/js'
 import './style.css'
@@ -215,13 +215,21 @@ export const TreeViewer = (props: TreeViewerProps) => {
                     />
                 }
                 <div style={{ display: 'block', padding: "10px", right: 0, bottom: 0, background: 'transparent', position: 'absolute' }}>
-                    {props.handleShare && <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleShareClick}>
-                        <Icon path={mdiShareVariant} size={0.8} />
-                    </IconButton>}
+                    {props.handleShare &&
+                    <Tooltip dark={theme === 'dark'}top inset content={<div>Share your family tree</div>}>
+                        <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleShareClick}>
+                            <Icon path={mdiShareVariant} size={0.8} />
+                        </IconButton>
+                    </Tooltip>
+                    }
                     <span>&nbsp;&nbsp;</span>
-                    {props.handleFullScreen && <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleFullScreenClick}>
-                        <Icon path={mdiFullscreen} size={0.8} />
-                    </IconButton>}
+                    {props.handleFullScreen && 
+                    <Tooltip dark={theme === 'dark'} top inset content={<div>Toggle FullScreen Mode</div>}>
+                        <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleFullScreenClick}>
+                            <Icon path={mdiFullscreen} size={0.8} />
+                        </IconButton>
+                    </Tooltip>
+                    }
                 </div>
             </Card>
         </div>
