@@ -27,6 +27,12 @@ export interface TreeViewerProps {
     data: any;
     width: string;
     height: string;
+    backgroundImage?: any;
+    fontColor?: string;
+    linkColor?: string;
+    fontSize?: number;
+    fontFamily?: string;
+    linkOpacity?: number;
     handleShare?: () => void;
     handleFullScreen?: () => void;
 }
@@ -36,7 +42,8 @@ const useStyles = createUseStyles({
         width: (props: { width: string; height: string }) => props.width,
         height: (props: { width: string; height: string }) => props.height,
         overflow: 'auto',
-        position: 'relative'
+        position: 'relative',
+        backgroundImage: (props: { width: string; height: string, backgroundImage: any }) => props.backgroundImage
     }
 });
 
@@ -52,9 +59,9 @@ export const TreeViewer = (props: TreeViewerProps) => {
     const [searchName, setSearchName] = useState("");
     const [theme, setTheme] = useState("dark");
     const componentRef = useRef<HTMLDivElement>(null);
-    let { width, height } = props
+    let { width, height, backgroundImage } = props
     let nextID = 0;
-    const classes = useStyles({ width, height });
+    const classes = useStyles({ width, height, backgroundImage });
 
     useEffect(() => {
         convertTreeNodeDatatoD3Heirarchy(props.data);
@@ -190,7 +197,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
     return (
         <div className={classes.wrapper} ref={componentRef}>
             <Card className={classes.wrapper} dark={theme === 'dark'}>
-                <TextField label={"Search ..."} style={{ display: 'block', right: 0, background: 'transparent', position: 'absolute' }} onChange={onSearching} />
+                <TextField label={"Search ..."} style={{ display: 'block', right: 0, position: 'absolute' }} onChange={onSearching} />
                 {activateTree &&
                     <Tree
                         animated
@@ -209,7 +216,24 @@ export const TreeViewer = (props: TreeViewerProps) => {
                             viewBox: 0 + " " + 0 + " " + treeWidth + " " + treeHeight,
                             className: 'custom'
                         }}
-                        textProps={{ fontSize: 16 }}
+                        nodeProps={{
+                            r:3, 
+                            stroke: props.linkColor || `#2593b8`, 
+                            fill: props.linkColor || `#2593b8`,
+                            strokeWidth: '1.5px'
+                        }}
+				        textProps={{
+                            fontSize:props.fontSize||14, 
+                            fill:props.fontColor||(theme === 'dark'? 'white': 'black'), 
+                            fontFamily:props.fontFamily,
+                            textShadow: `0 1px 4px black`
+                        }}
+				        pathProps={{
+                            stroke:props.linkColor || `#2593b8`, 
+                            strokeOpacity:props.linkOpacity || 1,
+                            strokeWidth: '1.5px',
+                            fill: 'none'
+                        }}
                         steps={30}
                         rerender={rerenderTree}
                     />
@@ -224,7 +248,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
                     }
                     <span>&nbsp;&nbsp;</span>
                     {props.handleFullScreen && 
-                    <Tooltip dark={theme === 'dark'} top inset content={<div>Toggle FullScreen Mode</div>}>
+                    <Tooltip dark={theme === 'dark'} top content={<div>Toggle FullScreen Mode</div>}>
                         <IconButton color='var(--secondary)' rounded text={false} dark={theme === 'dark'} onClick={handleFullScreenClick}>
                             <Icon path={mdiFullscreen} size={0.8} />
                         </IconButton>

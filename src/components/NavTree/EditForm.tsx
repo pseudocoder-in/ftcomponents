@@ -35,7 +35,7 @@ const useStyles = createUseStyles({
         '&:focus': {
             outline: 0
         },
-        width: (props: { width: string; height: string }) => props.width,
+        width: '100%',
         height: '75%'
     },
     modalContent: {
@@ -53,6 +53,7 @@ const useStyles = createUseStyles({
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
+        alignItems: 'baseline'
     },
     childrenEditView: {
         padding: '10px',
@@ -75,8 +76,7 @@ export const EditForm = (props: EditFormProps) => {
     const [partnerName, setPartnerName] = useState(node.partner);
     const [childrenNames, setChildrenNames] = useState<Map<string, string>>(new Map<string, string>());
 
-    let { width, height } = props;
-    const classes = useStyles({ width, height });
+    const classes = useStyles();
     const activeAddElementRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -147,6 +147,7 @@ export const EditForm = (props: EditFormProps) => {
             style={{
                 overlay: {
                     backgroundColor: props.theme === "dark" ? constants.OVERLAY_DARK_COLOR : constants.OVERLAY_LIGHT_COLOR,
+                    backdropFilter: 'blur(1px)'
                 }
             }}
         >
