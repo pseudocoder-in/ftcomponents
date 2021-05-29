@@ -24,8 +24,10 @@ Primary.args = {
   fontColor: 'black',
   fontSize: 14,
   backgroundImage: `url(https://www.transparenttextures.com/patterns/asfalt-dark.png)`,
+  editable: true,
   handleShare: () => { },
   handleFullScreen: () => { },
+  onUpdate: (data) => console.log(data)
 };
 
 export const Secondary = Template.bind({});
@@ -37,6 +39,7 @@ Secondary.args = {
   linkColor: 'gold',
   handleShare: () => { },
   handleFullScreen: () => { },
+  editable: true,
   backgroundImage: `radial-gradient(circle at center center, transparent,rgb(33,33,33)),repeating-linear-gradient(135deg, rgb(33,33,33) 0px, rgb(33,33,33) 2px,transparent 2px, transparent 10px,rgb(33,33,33) 10px, rgb(33,33,33) 11px,transparent 11px, transparent 21px),repeating-linear-gradient(45deg, rgb(47,47,47) 0px, rgb(47,47,47) 4px,transparent 4px, transparent 8px),linear-gradient(90deg, rgb(33,33,33),rgb(33,33,33))`
 };
 

@@ -1,16 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { createUseStyles } from 'react-jss';
-import Tree from 'react-tree-graph';
 import { zoom, ZoomBehavior, zoomIdentity, zoomTransform } from 'd3-zoom';
 import { select, selectAll } from 'd3-selection';
 import { Card, TextField, IconButton, Tooltip } from 'ui-neumorphism';
 import cloneDeep from 'lodash/cloneDeep';
 import { mdiShareVariant, mdiFullscreen, mdiFullscreenExit } from '@mdi/js'
+import { contextMenu, Menu, Item , theme, animation} from 'react-contexify';
+import 'react-contexify/dist/ReactContexify.min.css';
+import Tree from 'react-tree-graph';
+
 import './style.css'
+import { TreeNode } from './types';
+import { values } from 'lodash';
+import { EditForm } from './EditForm';
 const Icon = require('@mdi/react').default;
 
 interface Data {
-    [id: string]: Node;
+    [id: string]: TreeNode;
 }
 
 interface D3Node {
@@ -33,9 +39,26 @@ export interface TreeViewerProps {
     fontSize?: number;
     fontFamily?: string;
     linkOpacity?: number;
+    editable?: boolean;
     handleShare?: () => void;
     handleFullScreen?: () => void;
+    onUpdate?: (data: any) => void;
 }
+
+const menuId: string = 'adminMenu';
+
+const AdminMenu = (props: any) => (
+	<div>
+		<Menu id={props.menuId} theme={props.dark? theme.dark : theme.light} animation={animation.scale} style={{background:'transparent', backdropFilter:'blur(1px)'}}>
+			<Item onClick={() => props.onClickCb('EditInfo')}>
+			Add/Edit Info
+			</Item>
+			<Item onClick={() => props.onClickCb('Remove')}>
+			Remove Person
+			</Item>
+		</Menu>
+    </div>
+);
 
 const useStyles = createUseStyles({
     wrapper: {
@@ -49,6 +72,7 @@ const useStyles = createUseStyles({
 
 let closeNodeSet = new Set<string>();
 let zoomRef: ZoomBehavior<Element, unknown> | null = null;
+let nextID = 0;
 
 export const TreeViewer = (props: TreeViewerProps) => {
     const [rootNode, setRootNode] = useState({} as D3Node);
@@ -56,14 +80,19 @@ export const TreeViewer = (props: TreeViewerProps) => {
     const [rerenderTree, setRerenderTree] = useState(false);
     const [treeWidth, setTreeWidth] = useState(1000);
     const [treeHeight, setTreeHeight] = useState(1000);
+    const [modalElementEditIsOpen, setModalElementEditIsOpen] = useState(false);
     const [searchName, setSearchName] = useState("");
+    const [nodes, setNodes] = useState({} as Data);
     const [theme, setTheme] = useState("dark");
+    const [currentNodeId, setCuurrentNodeId] = useState("");
+
     const componentRef = useRef<HTMLDivElement>(null);
+
     let { width, height, backgroundImage } = props
-    let nextID = 0;
     const classes = useStyles({ width, height, backgroundImage });
 
     useEffect(() => {
+        setNodes(cloneDeep(props.data));
         convertTreeNodeDatatoD3Heirarchy(props.data);
         setTreeWidth(componentRef.current?.offsetWidth!);
         setTreeHeight(componentRef.current?.offsetHeight!);
@@ -81,8 +110,18 @@ export const TreeViewer = (props: TreeViewerProps) => {
     }, [activateTree, props]);
 
     const getNextID = () => {
-        ++nextID;
+        return (++nextID).toString();
     }
+
+    const scrollToElement = (targetElement: HTMLElement | undefined) => {
+        if (targetElement) {
+            targetElement.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "start"
+            });
+        }
+    };
 
     const reset = () => {
         selectAll('svg').each(function () {
@@ -105,6 +144,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
             child.partner = { name: data[childId].partner };
             child.children = [];
             buildChildrenNodes(data, child);
+            nextID = Math.max(Number(childId), nextID);
             root.children.push(child);
             closeNodeSet.add(childId);
         })
@@ -117,6 +157,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
         for (let key in nodes) {
             if (nodes[key].isRoot) {
                 root.id = nodes[key].id;
+                nextID = Math.max(Number(nodes[key].id), nextID);
                 root.name = nodes[key].name;
                 root.partner = { name: nodes[key].partner };
                 root.children = [];
@@ -135,7 +176,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
             if (node!.id === nodeId) {
                 return node;
             } else {
-                collection.unshift(...(node!.children.filter(child => !closeNodeSet.has(child.id))));
+                collection.unshift(...(node!.children));
             }
         }
         return null;
@@ -155,10 +196,6 @@ export const TreeViewer = (props: TreeViewerProps) => {
             closeNodeSet.add(nodeId);
         }
         setRerenderTree(!rerenderTree);
-    }
-
-    const handleContextMenu = () => {
-
     }
 
     const filterNodes = (parent: D3Node, searchName: string) => {
@@ -194,9 +231,116 @@ export const TreeViewer = (props: TreeViewerProps) => {
             props.handleShare();
     }
 
+    const handleElementEdit = (e: any) => {
+        setModalElementEditIsOpen(true);
+    }
+
+    const handleContextMenu = (event: MouseEvent, nodeId: string) => {
+        if(props.editable){
+            event.preventDefault();
+            setCuurrentNodeId(nodeId);
+            contextMenu.show({id: menuId, event: event, props:{nodeId:nodeId}});
+        }
+    }
+
+    const getParent = (id: string) => {
+        return values(nodes).filter((node: TreeNode) => node.children.includes(id))[0];
+    }
+
+    const removeNode = (nodeId: string) => {
+        //modify the treeNode input
+        let parentNode = getParent(nodeId);
+        if (!parentNode) {
+            // TO DO: Handle root node deletion
+            return;
+        }
+        nodes[parentNode.id].children = nodes[parentNode.id].children.filter((id) => id !== nodeId);
+        delete nodes[nodeId]; 
+        setNodes({ ...nodes });
+        if (props.onUpdate)
+            props.onUpdate(nodes);
+        
+        //modify the D3Node structure
+        let node = getNode(nodeId, rootNode);
+        let parentD3Node = getNode(parentNode.id, rootNode);
+        if(parentD3Node){
+            parentD3Node.children.splice(parentD3Node.children.findIndex(child => child.id === nodeId), 1);
+        }
+        setRerenderTree(!rerenderTree);
+    }
+
+    const editNode = (nodeId: string) => {
+        setModalElementEditIsOpen(true);
+    }
+
+    const adminMenuCb = (id: string) => {
+        let nodeId = currentNodeId;
+        if(id === 'EditInfo'){
+            editNode(nodeId);
+        } else if(id === 'Remove'){
+            removeNode(nodeId);
+        }
+    }
+
+    const getTreeNode = (nodeId: string) => {
+        let d3Node = getNode(nodeId, rootNode) ;
+        if(d3Node){
+            let childArray = Array<string>();
+            d3Node.children.forEach((child)=>{
+                childArray.push(child.id);
+            })
+            let node  = {
+                id: d3Node.id,
+                name: d3Node.name,
+                partner: d3Node.partner.name,
+                children: childArray
+            }
+            return node;
+        }
+        return {name:"", partner:"", children:[], id:"-1"};
+    }
+
+    const updateNode = (node: TreeNode, name: string, partnerName: string, childrenInfo: Map<string, string>) => {
+        nodes[node.id].name = name;
+        nodes[node.id].partner = partnerName;
+        nodes[node.id].children = node.children;
+        childrenInfo.forEach((value, key) => {
+            if (!nodes[key])
+                nodes[key] = { id: key, name: value, children: [], partner:"" } as any;
+            else
+                nodes[key].name = value || "";
+        })
+        setNodes({ ...nodes });
+        if (props.onUpdate)
+            props.onUpdate(nodes);
+    
+        //Update the D3Node structure
+        let d3Node = getNode(node.id, rootNode);
+        if(d3Node){
+            d3Node.name = name;
+            d3Node.partner.name = partnerName;
+            childrenInfo.forEach((value, key) => {
+                let currentChild = d3Node!.children.find((child) => child.id === key);
+                if (currentChild)
+                    currentChild.name = value;
+                else {
+                    let newChild: D3Node = {
+                        id: key,
+                        name: value,
+                        partner: { name: ""},
+                        children: []
+                    }
+                    d3Node?.children.push(newChild);
+                }
+            })
+        }
+        setRerenderTree(!rerenderTree);
+    }
+
     return (
         <div className={classes.wrapper} ref={componentRef}>
             <Card className={classes.wrapper} dark={theme === 'dark'}>
+                <AdminMenu menuId={menuId} onClickCb={adminMenuCb} dark={theme === 'dark'}/>
                 <TextField label={"Search ..."} style={{ display: 'block', right: 0, position: 'absolute' }} onChange={onSearching} />
                 {activateTree &&
                     <Tree
@@ -226,7 +370,7 @@ export const TreeViewer = (props: TreeViewerProps) => {
                             fontSize:props.fontSize||14, 
                             fill:props.fontColor||(theme === 'dark'? 'white': 'black'), 
                             fontFamily:props.fontFamily,
-                            textShadow: `0 1px 4px black`
+                            textshadow: `0 1px 4px black`
                         }}
 				        pathProps={{
                             stroke:props.linkColor || `#2593b8`, 
@@ -256,6 +400,22 @@ export const TreeViewer = (props: TreeViewerProps) => {
                     }
                 </div>
             </Card>
+            { modalElementEditIsOpen && 
+                <EditForm 
+                    theme= {theme}
+                    height={height}
+                    width={width}
+                    node = {getTreeNode(currentNodeId)!}
+                    getNextID= {getNextID}
+                    getNode={getTreeNode}
+                    updateNode= {updateNode}
+                    scrollToElement={scrollToElement} 
+                    setModalElementEditIsOpen={setModalElementEditIsOpen} 
+                />}
         </div>
     )
 }
+
+
+
+    //const { node, getNextID, getNode, scrollToElement, setModalElementEditIsOpen, updateNode } = props;

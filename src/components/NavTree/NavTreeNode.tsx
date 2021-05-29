@@ -80,15 +80,6 @@ export const NavTreeNode = (props: NavTreeNodeProps) => {
     const activeElementRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        /*overrideThemeVariables({
-            '--light-bg': '#e4ebf5',
-            '--light-bg-dark-shadow': '#bec8e4',
-            '--light-bg-light-shadow': '#ffffff',
-
-            '--dark-bg': '#444444',
-            '--dark-bg-dark-shadow': '#363636',
-            '--dark-bg-light-shadow': '#525252',
-        })*/
         if (activeElementRef.current)
             scrollToElement(activeElementRef.current);
     }, [])

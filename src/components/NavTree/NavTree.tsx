@@ -5,6 +5,7 @@ import { createUseStyles } from 'react-jss';
 import { NavTreeNode } from './NavTreeNode';
 import * as constants from './constants';
 import { TreeNode } from './types';
+import Modal from 'react-modal';
 
 export interface NavTreeProps {
     theme: string;
@@ -18,7 +19,6 @@ export interface NavTreeProps {
 interface Data {
     [id: string]: TreeNode;
 }
-
 
 const useStyles = createUseStyles({
     wrapper: {
@@ -154,6 +154,7 @@ export const NavTree = (props: NavTreeProps) => {
             return;
         }
         nodes[parentNode.id].children = nodes[parentNode.id].children.filter((id) => id !== node.id);
+        delete nodes[node.id]; 
         setNodes({ ...nodes });
         if (props.onUpdate)
             props.onUpdate(nodes);
